@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+# Do NOT ignore your trained weights: the runner clones this repo at your marked
+# commit and has no other way to get them. If they are too large for git, have
+# generate.py rebuild or fetch them from something committed here.
