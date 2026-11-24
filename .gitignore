@@ -2,6 +2,9 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+_data/
+_deps/
+out/
 .DS_Store
 # Do NOT ignore your trained weights: the runner clones this repo at your marked
 # commit and has no other way to get them. If they are too large for git, have
