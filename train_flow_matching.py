@@ -99,6 +99,16 @@ def update_ema(ema_model, model, decay):
             ema_buffer.copy_(buffer)
 
 
+def compact_state_dict(model):
+    """Move EMA weights to CPU and store them as float16 for a smaller submission."""
+    return {
+        name: tensor.detach().to(device="cpu", dtype=torch.float16)
+        if tensor.is_floating_point()
+        else tensor.detach().cpu()
+        for name, tensor in model.state_dict().items()
+    }
+
+
 def save_loss_figure(history, destination):
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -185,7 +195,8 @@ def main():
     output_path = Path(args.out)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     checkpoint = {
-        "ema_state_dict": ema_model.state_dict(),
+        "ema_state_dict": compact_state_dict(ema_model),
+        "weight_dtype": "float16",
         "base": args.base,
         "method": "rectified_flow",
         "vae_id": VAE_ID,
